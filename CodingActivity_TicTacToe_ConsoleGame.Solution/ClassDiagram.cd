@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="TicTacToe.ConsoleApp.GameController">
+    <Position X="0.5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAEAABEAAAAAAAAAAAAAAAQAAAAABAAAA=</HashCode>
+      <FileName>Controller\Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TicTacToe.ConsoleApp.Gameboard">
+    <Position X="4" Y="0.5" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="TicTacToe.ConsoleApp.Gameboard.PlayerPiece">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Gameboard.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="TicTacToe.ConsoleApp.Gameboard.GameState">
+        <TypeIdentifier>
+          <NewMemberFileName>Model\Gameboard.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAEACAAAEAAAAAAQiCEAgAACAAAAAAAAQAAAAAIA=</HashCode>
+      <FileName>Model\Gameboard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TicTacToe.ConsoleApp.GameboardPosition">
+    <Position X="4" Y="8.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\GameboardPosition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TicTacToe.ConsoleApp.ConsoleView">
+    <Position X="7.5" Y="0.5" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="TicTacToe.ConsoleApp.ConsoleView.ViewState">
+        <TypeIdentifier>
+          <NewMemberFileName>View\ConsoleView.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAABJEAAEAACAAAAFAAAIQAAAAAIEAQAQBAAgAAIAAA=</HashCode>
+      <FileName>View\ConsoleView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
