@@ -11,6 +11,16 @@ namespace CodingActivity_TicTacToe_ConsoleGame
 {
     public class Gameboard
     {
+        #region DELEGATES
+        /// <summary>
+        /// A method that determines whether a match has been made on the game board.
+        /// </summary>
+        /// <param name="posX">The starting X position of the pattern.</param>
+        /// <param name="posY">The starting Y position of the pattern.</param>
+        /// <returns></returns>
+        private delegate bool gameBoardMatch(int posX, int posY);
+        #endregion
+
         #region ENUMS
 
         public enum PlayerPiece
@@ -167,46 +177,74 @@ namespace CodingActivity_TicTacToe_ConsoleGame
         /// <returns>true if a player has won</returns>
         private bool ThreeInARow(PlayerPiece playerPieceToCheck)
         {
+            // set up game board patterns
+            // row checker
+            gameBoardMatch horizontalPattern = (int posX, int posY) =>
+            {
+                if ((posX < 0 || posX > 4) || (posY < 0 || posY > 1))
+                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+
+                return (_positionState[posX, posY] == playerPieceToCheck &&
+                    _positionState[posX, posY + 1] == playerPieceToCheck &&
+                    _positionState[posX, posY + 2] == playerPieceToCheck);
+            };
+            // column checker
+            gameBoardMatch verticalPattern = (int posX, int posY) =>
+            {
+                if ((posY < 0 || posY > 4) || (posX < 0 || posX > 1))
+                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+
+                return (_positionState[posX, posY] == playerPieceToCheck &&
+                    _positionState[posX + 1, posY] == playerPieceToCheck &&
+                    _positionState[posX + 2, posY] == playerPieceToCheck);
+            };
+            // diagonal checker #1
+            gameBoardMatch diagonalPatternClimb = (int posX, int posY) =>
+            {
+                if ((posX < 0 || posX > 1) || (posY < 0 || posY > 1))
+                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+
+                return (_positionState[posX, posY] == playerPieceToCheck &&
+                _positionState[posX + 1, posY + 1] == playerPieceToCheck &&
+                _positionState[posX + 2, posY + 2] == playerPieceToCheck);
+            };
+            // diagonal checker #2
+            gameBoardMatch diagonalPatternFall = (int posX, int posY) =>
+            {
+                if ((posX < 0 || posX > 1) || (posY < 0 || posY > 1))
+                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+
+                return (_positionState[posX, posY + 2] == playerPieceToCheck &&
+                _positionState[posX + 1, posY + 1] == playerPieceToCheck &&
+                _positionState[posX + 2, posY] == playerPieceToCheck);
+            };
+
+
             //
             // Check rows for player win
             //
             for (int row = 0; row < 4; row++)
             {
-                if (_positionState[row, 0] == playerPieceToCheck &&
-                    _positionState[row, 1] == playerPieceToCheck &&
-                    _positionState[row, 2] == playerPieceToCheck)
-                {
-                    return true;
-                }
+                if (horizontalPattern(row, 0) || horizontalPattern(row, 1)) return true;
             }
 
             //
             // Check columns for player win
             //
-            for (int column = 0; column < 3; column++)
+            for (int column = 0; column < 4; column++)
             {
-                if (_positionState[0, column] == playerPieceToCheck &&
-                    _positionState[1, column] == playerPieceToCheck &&
-                    _positionState[2, column] == playerPieceToCheck)
-                {
-                    return true;
-                }
+                if (verticalPattern(0, column) || verticalPattern(1, column)) return true;
             }
 
             //
             // Check diagonals for player win
             //
-            if (
-                (_positionState[0, 0] == playerPieceToCheck &&
-                _positionState[1, 1] == playerPieceToCheck &&
-                _positionState[2, 2] == playerPieceToCheck)
-                ||
-                (_positionState[0, 2] == playerPieceToCheck &&
-                _positionState[1, 1] == playerPieceToCheck &&
-                _positionState[2, 0] == playerPieceToCheck)
-                )
+            for (int row = 0; row < 2; row++)
             {
-                return true;
+                for (int column = 0; column < 2; column++)
+                {
+                    if (diagonalPatternClimb(row, column) || diagonalPatternFall(row, column)) return true;
+                }
             }
 
             //

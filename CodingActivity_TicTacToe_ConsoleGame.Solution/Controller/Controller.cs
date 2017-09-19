@@ -31,6 +31,8 @@ namespace CodingActivity_TicTacToe_ConsoleGame
         private static Gameboard _gameboard = new Gameboard();
         private static ConsoleView _gameView = new ConsoleView(_gameboard);
 
+        // TODO: Add win streak field
+
         #endregion
 
         #region PROPERTIES
