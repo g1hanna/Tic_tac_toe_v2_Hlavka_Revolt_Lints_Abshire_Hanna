@@ -219,6 +219,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             DisplayGameStatus();
         }
 
+        // TODO: Add a win streak paramater
         public void DisplayCurrentGameStatus(int roundsPlayed, int playerXWins, int playerOWins, int catsGames)
         {
             ConsoleUtil.HeaderText = "Current Game Status";
@@ -232,6 +233,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             ConsoleUtil.DisplayMessage("Rounds for Player X: " + playerXWins + " - " + String.Format("{0:P2}", playerXPercentageWins));
             ConsoleUtil.DisplayMessage("Rounds for Player O: " + playerOWins + " - " + String.Format("{0:P2}", playerOPercentageWins));
             ConsoleUtil.DisplayMessage("Cat's Games: " + catsGames + " - " + String.Format("{0:P2}", percentageOfCatsGames));
+            // TODO: Display win streak here
 
             DisplayContinuePrompt();
         }

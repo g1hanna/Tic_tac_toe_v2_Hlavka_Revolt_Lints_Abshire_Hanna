@@ -23,6 +23,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
         private int _playerXNumberOfWins;
         private int _playerONumberOfWins;
         private int _numberOfCatsGames;
+        private int _winStreak;
 
         //
         // instantiate  a Gameboard object
@@ -103,6 +104,8 @@ namespace CodingActivity_TicTacToe_ConsoleGame
                 //
                 // Round Complete: Display the results
                 //
+
+                // TODO: Pass the win streak to the stats screen method
                 _gameView.DisplayCurrentGameStatus(_roundNumber, _playerXNumberOfWins, _playerONumberOfWins, _numberOfCatsGames);
 
                 //
