@@ -96,6 +96,11 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             ConsoleUtil.DisplayMessage("Press any key to continue.");
             ConsoleKeyInfo response = Console.ReadKey();
 
+            if (response.Key == ConsoleKey.Q)
+            {
+                DisplayExitPrompt();   
+            }
+
             Console.WriteLine();
 
             Console.CursorVisible = true;
@@ -179,20 +184,19 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             ConsoleUtil.HeaderText = "The Tic-tac-toe Game";
             ConsoleUtil.DisplayReset();
 
-            ConsoleUtil.DisplayMessage("Written by Courtney, Stacy & Justina");
+            ConsoleUtil.DisplayMessage("Written by Courtney, Stacy, Gabe, and Bruce");
             ConsoleUtil.DisplayMessage("Northwestern Michigan College");
             Console.WriteLine();
 
             sb.Clear();
             sb.AppendFormat("This application is designed to allow two players to play ");
-            sb.AppendFormat("a game of tic-tac-toe. The rules are the standard rules for the ");
-            sb.AppendFormat("game with each player taking a turn.");
+            sb.AppendFormat("a game of tic-tac-toe. The rules are standard, but the board is 4x4. To win, you still have to get 3 in a row. ");
+            sb.AppendFormat("Each player gets to take a turn.");
             ConsoleUtil.DisplayMessage(sb.ToString());
             Console.WriteLine();
 
-            sb.Clear();
-            sb.AppendFormat("Your first task will be to set up your account details.");
-            ConsoleUtil.DisplayMessage(sb.ToString());
+            ConsoleUtil.DisplayMessage("Press Q to quit at any time, if you get bored and don't to play the game anymore.");
+            Console.WriteLine();
 
             DisplayContinuePrompt();
         }
@@ -220,7 +224,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
         }
 
         // TODO: Add a win streak paramater
-        public void DisplayCurrentGameStatus(int roundsPlayed, int playerXWins, int playerOWins, int catsGames)
+        public void DisplayCurrentGameStatus(int roundsPlayed, int playerXWins, int playerOWins, int catsGames, int winStreak)
         {
             ConsoleUtil.HeaderText = "Current Game Status";
             ConsoleUtil.DisplayReset();
@@ -233,6 +237,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             ConsoleUtil.DisplayMessage("Rounds for Player X: " + playerXWins + " - " + String.Format("{0:P2}", playerXPercentageWins));
             ConsoleUtil.DisplayMessage("Rounds for Player O: " + playerOWins + " - " + String.Format("{0:P2}", playerOPercentageWins));
             ConsoleUtil.DisplayMessage("Cat's Games: " + catsGames + " - " + String.Format("{0:P2}", percentageOfCatsGames));
+            ConsoleUtil.DisplayMessage("Your win streak: " + winStreak);
             // TODO: Display win streak here
 
             DisplayContinuePrompt();
@@ -240,10 +245,19 @@ namespace CodingActivity_TicTacToe_ConsoleGame
 
         public bool DisplayNewRoundPrompt()
         {
-            ConsoleUtil.HeaderText = "Continue or Quit";
+            ConsoleUtil.HeaderText = "New Round or Rematch";
             ConsoleUtil.DisplayReset();
 
-            return DisplayGetYesNoPrompt("Would you like to play another round?");
+            bool? response = DisplayGetYesNoPrompt("Would you like to play another round?");
+            if (response == null)
+            {
+                DisplayExitPrompt();
+                return false;
+            }
+            else
+            {
+                return response.Value;
+            }
         }
 
         public void DisplayGameStatus()
@@ -336,12 +350,10 @@ namespace CodingActivity_TicTacToe_ConsoleGame
                 }
 
                 Console.Write("\n\t\t\t\t        |---+---+---+---|\n");
-            
-
 
             }
 
-        }
+    }
 
         /// <summary>
         /// display prompt for a player's next move
@@ -366,9 +378,9 @@ namespace CodingActivity_TicTacToe_ConsoleGame
         /// </summary>
         /// <param name="promptMessage">prompt message</param>
         /// <returns>bool where true = yes</returns>
-        private bool DisplayGetYesNoPrompt(string promptMessage)
+        private bool? DisplayGetYesNoPrompt(string promptMessage)
         {
-            bool yesNoChoice = false;
+            bool? yesNoChoice = false;
             bool validResponse = false;
             string userResponse;
 
@@ -388,6 +400,11 @@ namespace CodingActivity_TicTacToe_ConsoleGame
                 {
                     validResponse = true;
                     yesNoChoice = false;
+                }
+                else if (userResponse.ToUpper() == "Q")
+                {
+                    validResponse = true;
+                    yesNoChoice = null;
                 }
                 else
                 {
@@ -446,7 +463,8 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             {
                 DisplayPositionPrompt(coordinateType);
 
-                if (int.TryParse(Console.ReadLine(), out tempCoordinate))
+                string userChoice = Console.ReadLine();
+                if (int.TryParse(userChoice, out tempCoordinate))
                 {
                     //
                     // Player response within range
@@ -462,6 +480,10 @@ namespace CodingActivity_TicTacToe_ConsoleGame
                     {
                         DisplayMessageBox(coordinateType + " numbers are limited to (1,2,3,4)");
                     }
+                }
+                else if (userChoice.ToUpper() == "Q")
+                {
+                    DisplayExitPrompt();
                 }
                 //
                 // Player response cannot be parsed as integer
@@ -482,6 +504,23 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             //
             CurrentViewState = ViewState.PlayerUsedMaxAttempts;
             return tempCoordinate;
+        }
+
+        public bool DisplayExitGamePrompt()
+        {
+            ConsoleUtil.HeaderText = "Continue or Exit";
+            ConsoleUtil.DisplayReset();
+
+            bool? response = DisplayGetYesNoPrompt("Do you want to quit game?");
+            if (response == null)
+            {
+                DisplayExitPrompt();
+                return false;
+            }
+            else
+            {
+                return response.Value;
+            }
         }
 
         #endregion
