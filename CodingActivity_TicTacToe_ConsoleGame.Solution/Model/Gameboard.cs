@@ -130,11 +130,12 @@ namespace CodingActivity_TicTacToe_ConsoleGame
         /// <summary>
         /// Update the game board state if a player wins or a cat's game happens.
         /// </summary>
-        public void UpdateGameboardState()
+        public void UpdateGameboardState(out PlayerPiece winner)
         {
             if (ThreeInARow(PlayerPiece.X))
             {
                 _currentRoundState = GameboardState.PlayerXWin;
+                winner = PlayerPiece.X;
             }
             //
             // A player O has won
@@ -142,6 +143,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             else if (ThreeInARow(PlayerPiece.O))
             {
                 _currentRoundState = GameboardState.PlayerOWin;
+                winner = PlayerPiece.O;
             }
             //
             // All positions filled
@@ -149,6 +151,12 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             else if (IsCatsGame())
             {
                 _currentRoundState = GameboardState.CatsGame;
+                winner = PlayerPiece.None;
+            }
+
+            else
+            {
+                winner = PlayerPiece.None;
             }
         }
         
