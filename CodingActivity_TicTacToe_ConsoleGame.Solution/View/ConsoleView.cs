@@ -120,7 +120,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
 
             Console.ReadKey();
 
-            System.Environment.Exit(1);
+            System.Environment.Exit(0);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             ConsoleUtil.DisplayMessage(sb.ToString());
             Console.WriteLine();
 
-            ConsoleUtil.DisplayMessage("Press Q to quit at any time, if you get bored and don't to play the game anymore.");
+            ConsoleUtil.DisplayMessage("Press Q to quit at any time, if you get bored and don't want to play the game anymore.");
             Console.WriteLine();
 
             DisplayContinuePrompt();

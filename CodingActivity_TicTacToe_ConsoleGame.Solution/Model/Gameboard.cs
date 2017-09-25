@@ -11,6 +11,51 @@ namespace CodingActivity_TicTacToe_ConsoleGame
 {
     public class Gameboard
     {
+        #region CLASSES
+        /// <summary>
+        /// An exception that occurs when a position outside the <see cref="Gameboard"/> 
+        /// is used.
+        /// </summary>
+        public class GamePositionException : Exception
+        {
+            private int _invalidX;
+            private int _invalidY;
+
+            /// <summary>
+            /// Creates a new gameboard position error. An error message is automatically generated
+            /// </summary>
+            /// <param name="invalidX">The x-position of the unaccepted space.</param>
+            /// <param name="invalidY">The y-position of the unaccepted space.</param>
+            public GamePositionException(int invalidX, int invalidY) :
+                base(string.Format("Position [{0}, {1}] not on the gameboard.", invalidX, invalidY))
+            {
+                _invalidX = invalidX;
+                _invalidY = invalidY;
+            }
+            /// <summary>
+            /// Creates a new gameboard position error. The user must provide an error message.
+            /// </summary>
+            /// <param name="message">A user-defined error message.</param>
+            /// <param name="invalidX">The x-position of the unaccepted space.</param>
+            /// <param name="invalidY">The y-position of the unaccepted space.</param>
+            public GamePositionException(string message, int invalidX, int invalidY) :
+                base(message)
+            {
+                _invalidX = invalidX;
+                _invalidY = invalidY;
+            }
+
+            /// <summary>
+            /// Obtains the coordinates of an invalid position.
+            /// </summary>
+            /// <returns>A two-element array containing the x- and y-coordinates, respectively</returns>
+            public int[] GetCoordinates()
+            {
+                return new int[2] { _invalidX, _invalidY };
+            }
+        }
+        #endregion
+
         #region DELEGATES
         /// <summary>
         /// A method that determines whether a match has been made on the game board.
@@ -70,6 +115,24 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             get { return _currentRoundState; }
             set { _currentRoundState = value; }
         }
+
+        private PlayerPiece this[int x, int y]
+        {
+            get
+            {
+                if ((x < 4 && x >= 0) && (y < 4 && y >= 0))
+                    return _positionState[x, y];
+                else
+                    throw new GamePositionException(x, y);
+            }
+            set
+            {
+                if ((x < 4 && x >= 0) && (y < 4 && y >= 0))
+                    _positionState[x, y] = value;
+                else
+                    throw new GamePositionException(x, y);
+            }
+        } 
         #endregion
 
         #region CONSTRUCTORS
@@ -117,7 +180,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             // Note: gameboardPosition converted to array index by subtracting 1
             //
 
-            if (_positionState[gameboardPosition.Row - 1, gameboardPosition.Column - 1] == PlayerPiece.None)
+           if (this[gameboardPosition.Row - 1, gameboardPosition.Column - 1] == PlayerPiece.None)
             {
                 return true;
             }
@@ -130,8 +193,12 @@ namespace CodingActivity_TicTacToe_ConsoleGame
         /// <summary>
         /// Update the game board state if a player wins or a cat's game happens.
         /// </summary>
+        /// <param name="winner">The winning player of the game.</param>
         public void UpdateGameboardState(out PlayerPiece winner)
         {
+            //
+            // Player X has won
+            //
             if (ThreeInARow(PlayerPiece.X))
             {
                 _currentRoundState = GameboardState.PlayerXWin;
@@ -153,7 +220,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
                 _currentRoundState = GameboardState.CatsGame;
                 winner = PlayerPiece.None;
             }
-
+            // Other situation
             else
             {
                 winner = PlayerPiece.None;
@@ -190,7 +257,8 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             gameBoardMatch horizontalPattern = (int posX, int posY) =>
             {
                 if ((posX < 0 || posX > 4) || (posY < 0 || posY > 1))
-                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+                    throw new GamePositionException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.",
+                        posX, posY), posX, posY);
 
                 return (_positionState[posX, posY] == playerPieceToCheck &&
                     _positionState[posX, posY + 1] == playerPieceToCheck &&
@@ -200,7 +268,8 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             gameBoardMatch verticalPattern = (int posX, int posY) =>
             {
                 if ((posY < 0 || posY > 4) || (posX < 0 || posX > 1))
-                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+                    throw new GamePositionException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.",
+                        posX, posY), posX, posY);
 
                 return (_positionState[posX, posY] == playerPieceToCheck &&
                     _positionState[posX + 1, posY] == playerPieceToCheck &&
@@ -210,7 +279,8 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             gameBoardMatch diagonalPatternClimb = (int posX, int posY) =>
             {
                 if ((posX < 0 || posX > 1) || (posY < 0 || posY > 1))
-                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+                    throw new GamePositionException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.",
+                        posX, posY), posX, posY);
 
                 return (_positionState[posX, posY] == playerPieceToCheck &&
                 _positionState[posX + 1, posY + 1] == playerPieceToCheck &&
@@ -220,7 +290,8 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             gameBoardMatch diagonalPatternFall = (int posX, int posY) =>
             {
                 if ((posX < 0 || posX > 1) || (posY < 0 || posY > 1))
-                    throw new IndexOutOfRangeException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.", posX, posY));
+                    throw new GamePositionException(string.Format("Invalid coordinates ({0}, {1}). Match area exceeds board.",
+                        posX, posY), posX, posY);
 
                 return (_positionState[posX, posY + 2] == playerPieceToCheck &&
                 _positionState[posX + 1, posY + 1] == playerPieceToCheck &&
@@ -273,7 +344,7 @@ namespace CodingActivity_TicTacToe_ConsoleGame
             // Row and column value adjusted to match array structure
             // Note: gameboardPosition converted to array index by subtracting 1
             //
-            _positionState[gameboardPosition.Row - 1, gameboardPosition.Column - 1] = PlayerPiece;
+            this[gameboardPosition.Row - 1, gameboardPosition.Column - 1] = PlayerPiece;
 
             //
             // Change game board state to next player

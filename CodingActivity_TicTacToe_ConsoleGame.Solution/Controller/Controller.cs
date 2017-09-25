@@ -241,19 +241,27 @@ namespace CodingActivity_TicTacToe_ConsoleGame
 
             if (_gameView.CurrentViewState != ConsoleView.ViewState.PlayerUsedMaxAttempts)
             {
-                //
-                // player chose an open position on the game board, add it to the game board
-                //
-                if (_gameboard.GameboardPositionAvailable(gameboardPosition))
+                try
                 {
-                    _gameboard.SetPlayerPiece(gameboardPosition, currentPlayerPiece);
+                    //
+                    // player chose an open position on the game board, add it to the game board
+                    //
+                    if (_gameboard.GameboardPositionAvailable(gameboardPosition))
+                    {
+                        _gameboard.SetPlayerPiece(gameboardPosition, currentPlayerPiece);
+                    }
+                    //
+                    // player chose a taken position on the game board
+                    //
+                    else
+                    {
+                        _gameView.DisplayGamePositionChoiceNotAvailableScreen();
+                    }
                 }
-                //
-                // player chose a taken position on the game board
-                //
-                else
+                catch (Gameboard.GamePositionException pe)
                 {
                     _gameView.DisplayGamePositionChoiceNotAvailableScreen();
+                    Console.WriteLine(pe.Message);
                 }
             }
         }
